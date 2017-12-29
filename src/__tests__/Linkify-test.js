@@ -1,4 +1,4 @@
-jest.autoMockOff();
+t.autoMockOff();
 
 let React = require('react');
 let TestUtils = require('react-addons-test-utils');
@@ -76,6 +76,17 @@ describe('Linkify', () => {
       expect(output[1].props.href).toEqual(input[1]);
       expect(output[1].props.children).toEqual(input[1]);
     });
+
+    it('should delegate to transformAnchorText if present', () => {
+      const transformFn = (text) => 'See this repo on Github';
+      let linkify = TestUtils.renderIntoDocument(<Linkify transformAnchorText={transformFn}></Linkify>);
+      let input = ['https://github.com/facebook/react'];
+      let output = linkify.parseString(input.join(''));
+
+      expect(output.type).toEqual('a');
+      expect(output.props.href).toEqual(input[0]);
+      expect(output.props.children).toEqual('See this repo on Github');
+    });
   });
 
   describe('#parse', () => {
@@ -118,16 +129,6 @@ describe('Linkify', () => {
       expect(output[1].props.href).toEqual(`mailto:${input[1]}`);
       expect(output[1].props.children).toEqual(input[1]);
       expect(output[2]).toEqual(input[2]);
-    });
-
-    it('should parse complex urls', () => {
-        let input = [
-            'For more information ',
-            'https://www.wayfair.de/dCor-design---DCOO1623-L6-K~DCOO1623.html?refid=MODE368-DCOO1623_21727408&PiID%5B%5D=21727408',
-            '.'
-        ];
-        let output = linkify.parseString(input.join(''));
-        expect(output[1].props.children).toEqual(input[1]);
     });
   });
 

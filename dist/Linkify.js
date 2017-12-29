@@ -87,7 +87,8 @@ var Linkify = function (_React$Component) {
 
           props[key] = val;
         }
-        elements.push(_react2.default.createElement(_this2.props.component, props, match.text));
+        var text = _this2.props.transformAnchorText ? _this2.props.transformAnchorText(match.text) : match.text;
+        elements.push(_react2.default.createElement(_this2.props.component, props, text));
         lastIndex = match.lastIndex;
       });
 
@@ -137,9 +138,10 @@ Linkify.MATCH = 'LINKIFY_MATCH';
 Linkify.propTypes = {
   className: _propTypes2.default.string,
   component: _propTypes2.default.any,
+  emailRegex: _propTypes2.default.object,
   properties: _propTypes2.default.object,
-  urlRegex: _propTypes2.default.object,
-  emailRegex: _propTypes2.default.object
+  transformAnchorText: _propTypes2.default.func,
+  urlRegex: _propTypes2.default.object
 };
 Linkify.defaultProps = {
   className: 'Linkify',
